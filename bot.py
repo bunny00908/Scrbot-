@@ -4,17 +4,17 @@ from datetime import datetime
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-# --- Fill these from your BotFather and my.telegram.org ---
-API_ID = 23925218
+# =========== EDIT THESE ===========
+API_ID = 23925218  # your api_id from my.telegram.org
 API_HASH = "396fd3b1c29a427df8cc6fb54f3d307c"
 BOT_TOKEN = "7915422206:AAHTZkpxY4y0kNEldqswL-itG3XyethDTOU"
 
-SOURCE_GROUPS = [-1002871766358]  # Add your source group IDs
-TARGET_CHANNEL = -1002753096401   # Your target channel ID
+SOURCE_GROUPS = [-1002871766358]      # your source group IDs (as negative integers)
+TARGET_CHANNEL = -1002753096401       # your channel ID (as negative integer)
 
 MAIN_CHANNEL_LINK = "https://t.me/YOUR_MAIN_CHANNEL"
 BACKUP_CHANNEL_LINK = "https://t.me/YOUR_BACKUP_CHANNEL"
-# --------------------------------------------------------
+# ==================================
 
 app = Client("scrbot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
@@ -84,7 +84,7 @@ async def cc_scraper(client, message):
         await app.send_message(
             TARGET_CHANNEL,
             msg,
-            parse_mode="HTML",
+            parse_mode="html",  # <<==== LOWERCASE for pyrogram v2
             reply_markup=keyboard
         )
 
