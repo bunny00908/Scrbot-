@@ -5,12 +5,15 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 # =========== CONFIGURE THESE ===========
-API_ID = 23925218  # your api_id from my.telegram.org
-API_HASH = "396fd3b1c29a427df8cc6fb54f3d307c"
-BOT_TOKEN = "your_7915422206:AAHTZkpxY4y0kNEldqswL-itG3XyethDTOU_token"
+API_ID = 29569239  # your api_id from my.telegram.org
+API_HASH = "b2407514e15f24c8ec2c735e8018acd7"
+BOT_TOKEN = "7915422206:AAHTZkpxY4y0kNEldqswL-itG3XyethDTOU"
 
 SOURCE_GROUPS = [-1002871766358]      # Source group ID for CC logs
-TARGET_CHANNEL = -1002753096401       # Target channel/group to send result
+
+# USE @username IF POSSIBLE! If your channel/group has a public username,
+# put it here as a string, e.g., "@yourchannelusername".
+TARGET_CHANNEL = "@testsyueue"  # or -100xxxxxxxxx if public and bot is admin
 
 MAIN_CHANNEL_LINK = "https://t.me/YOUR_MAIN_CHANNEL"
 BACKUP_CHANNEL_LINK = "https://t.me/YOUR_BACKUP_CHANNEL"
@@ -48,21 +51,22 @@ def format_card_message(cc, bin_info):
     card_number, month, year, cvv = cc
     bin_number = card_number[:6]
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    # Plain text formatting for safe sending!
     return (
-        "<b>Approved Scrapper</b>\n"
-        "━━━━━━━━━━━━━\n"
-        f"<b>CC</b>: <code>{card_number}|{month}|{year}|{cvv}</code>\n"
-        f"<b>Status</b>: APPROVED ✅\n"
-        f"<b>Gate</b>: Stripe Auth\n"
-        "━━━━━━━━━━━━━\n"
-        f"<b>Bin</b>: <code>{bin_number}</code>\n"
-        f"<b>Country</b>: {bin_info['country']} {bin_info['flag']}\n"
-        f"<b>Issuer</b>: {bin_info['bank']}\n"
-        f"<b>Type</b>: {bin_info['type']} - {bin_info['brand']}\n"
-        "━━━━━━━━━━━━━\n"
-        f"<b>Time</b>: <code>{timestamp}</code>\n"
-        "<b>Scrapped By</b>: Bᴜɴɴʏ\n"
-        "━━━━━━━━━━━━━"
+        "Approved Scrapper\n"
+        "---------------------\n"
+        f"CC: {card_number}|{month}|{year}|{cvv}\n"
+        "Status: APPROVED ✅\n"
+        "Gate: Stripe Auth\n"
+        "---------------------\n"
+        f"Bin: {bin_number}\n"
+        f"Country: {bin_info['country']} {bin_info['flag']}\n"
+        f"Issuer: {bin_info['bank']}\n"
+        f"Type: {bin_info['type']} - {bin_info['brand']}\n"
+        "---------------------\n"
+        f"Time: {timestamp}\n"
+        "Scrapped By: Bᴜɴɴʏ\n"
+        "---------------------"
     )
 
 @app.on_message(filters.chat(SOURCE_GROUPS))
@@ -85,17 +89,10 @@ async def cc_scraper(client, message):
             await app.send_message(
                 TARGET_CHANNEL,
                 msg,
-                parse_mode="html",   # Pyrogram v2.x only supports lowercase 'html'
                 reply_markup=keyboard
             )
         except Exception as e:
-            print(f"Send error: {e} -- Retrying without parse_mode")
-            # Fallback: send as plain text if parse_mode fails
-            await app.send_message(
-                TARGET_CHANNEL,
-                msg,
-                reply_markup=keyboard
-            )
+            print(f"Send error: {e}")
 
 print("Bot is running. Press Ctrl+C to stop.")
 app.run()
