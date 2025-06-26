@@ -6,9 +6,9 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 # --- EDIT THESE ---
-API_ID = 1234567  # your api_id from my.telegram.org
-API_HASH = "your_api_hash"
-BOT_TOKEN = "your_bot_token"
+API_ID = 23925218  # your api_id from my.telegram.org
+API_HASH = "396fd3b1c29a427df8cc6fb54f3d307c"
+BOT_TOKEN = "7915422206:AAHTZkpxY4y0kNEldqswL-itG3XyethDTOU"
 
 SOURCE_GROUPS = [-1001234567890, -1002345678901]  # your group IDs
 TARGET_CHANNEL = -1003456789012                  # your channel ID
