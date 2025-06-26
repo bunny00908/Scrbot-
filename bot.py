@@ -4,17 +4,17 @@ from datetime import datetime
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-# =========== EDIT THESE ===========
+# =========== CONFIGURE THESE ===========
 API_ID = 23925218  # your api_id from my.telegram.org
 API_HASH = "396fd3b1c29a427df8cc6fb54f3d307c"
-BOT_TOKEN = "7915422206:AAHTZkpxY4y0kNEldqswL-itG3XyethDTOU"
+BOT_TOKEN = "your_7915422206:AAHTZkpxY4y0kNEldqswL-itG3XyethDTOU_token"
 
-SOURCE_GROUPS = [-1002871766358]      # your source group IDs (as negative integers)
-TARGET_CHANNEL = -1002753096401       # your channel ID (as negative integer)
+SOURCE_GROUPS = [-1002871766358]      # Source group ID for CC logs
+TARGET_CHANNEL = -1002753096401       # Target channel/group to send result
 
 MAIN_CHANNEL_LINK = "https://t.me/YOUR_MAIN_CHANNEL"
 BACKUP_CHANNEL_LINK = "https://t.me/YOUR_BACKUP_CHANNEL"
-# ==================================
+# =======================================
 
 app = Client("scrbot", api_id=API_ID, api_hash=API_HASH, bot_token=BOT_TOKEN)
 
@@ -81,12 +81,21 @@ async def cc_scraper(client, message):
                 InlineKeyboardButton("🔄 Backup Channel", url=BACKUP_CHANNEL_LINK),
             ]
         ])
-        await app.send_message(
-            TARGET_CHANNEL,
-            msg,
-            parse_mode="html",  # <<==== LOWERCASE for pyrogram v2
-            reply_markup=keyboard
-        )
+        try:
+            await app.send_message(
+                TARGET_CHANNEL,
+                msg,
+                parse_mode="html",   # Pyrogram v2.x only supports lowercase 'html'
+                reply_markup=keyboard
+            )
+        except Exception as e:
+            print(f"Send error: {e} -- Retrying without parse_mode")
+            # Fallback: send as plain text if parse_mode fails
+            await app.send_message(
+                TARGET_CHANNEL,
+                msg,
+                reply_markup=keyboard
+            )
 
 print("Bot is running. Press Ctrl+C to stop.")
 app.run()
